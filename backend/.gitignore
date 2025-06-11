@@ -1,5 +1,6 @@
 .env
 node_modules
 uploads/
-*.json
 # Add any other sensitive or build files here
+# Do NOT ignore package.json
+!package.json
