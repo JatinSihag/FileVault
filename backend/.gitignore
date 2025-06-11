@@ -1,0 +1,5 @@
+.env
+node_modules
+uploads/
+*.json
+# Add any other sensitive or build files here
