@@ -2,5 +2,6 @@
 node_modules
 uploads/
 # Add any other sensitive or build files here
+backend/drive-31121-firebase-adminsdk-fbsvc-50fc691f6e.json
 # Do NOT ignore package.json
 !package.json
