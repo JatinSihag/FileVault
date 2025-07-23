@@ -22,7 +22,7 @@ if (process.env.FIREBASE_TYPE) {
 
 const firebase = Firebase.initializeApp({
   credential: Firebase.credential.cert(serviceAccount),
-  storageBucket: "gs://drive-31121.firebasestorage.app",
+storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "drive-31121.appspot.com",
 });
 
 module.exports = Firebase;
