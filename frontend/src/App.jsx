@@ -10,6 +10,9 @@ import Profile from './components/Profile';
 import Upload from './components/Upload';
 import PublicHome from './pages/PublicHome';
 import Navbar from './components/Navbar';
+import axios from 'axios';
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3333';
 
 function App() {
   
@@ -21,7 +24,7 @@ function App() {
       try {
         const token = localStorage.getItem('token');
         if (token) {
-          const res = await axios.get('http://localhost:3333/user/profile', {
+          const res = await axios.get(`${API_BASE}/user/profile`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           setUser(res.data.user);

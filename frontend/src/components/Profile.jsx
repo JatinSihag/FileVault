@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from './UserProvider';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3333';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const Profile = () => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:3333/user/profile', {
+        const res = await axios.get(`${API_URL}/user/profile`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUser(res.data.user);
@@ -33,7 +34,7 @@ const Profile = () => {
     const fetchFiles = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:3333/home', {
+        const res = await axios.get(`${API_URL}/home`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setFileCount(res.data.files.length);
@@ -67,7 +68,7 @@ const Profile = () => {
     formData.append('photo', file);
     const token = localStorage.getItem('token');
     try {
-      const res = await axios.post('http://localhost:3333/user/profile/photo', formData, {
+      const res = await axios.post(`${API_URL}/user/profile/photo`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`
@@ -148,7 +149,7 @@ const Profile = () => {
           {/* Right Section: Profile Image & Photo Upload */}
           <div className="flex flex-col items-center min-w-[320px]">
             <img
-              src={user.profilePicture ? `http://localhost:3333${user.profilePicture}` : '/default-avatar.png'}
+              src={user.profilePicture ? `${API_URL}${user.profilePicture}` : '/default-avatar.png'}
               alt="Profile"
               style={{
                 width: shrink || showUpload ? 100 : 300,

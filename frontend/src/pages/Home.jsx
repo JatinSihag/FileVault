@@ -6,48 +6,54 @@ const Home = () => {
   const [fileUrls, setFileUrls] = useState({});
   const [deleting, setDeleting] = useState(null);
 
-  useEffect(() => {
-    // Fetch file list
-    const fetchFiles = async () => {
-      const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:3333/home', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setFiles(res.data.files || []);
-    };
-    fetchFiles();
-  }, []);
+  const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3333';
 
   useEffect(() => {
-    // Fetch signed URLs for each file
+    const fetchFiles = async () => {
+      const token = localStorage.getItem('token');
+      try {
+        const res = await axios.get(`${API_URL}/home`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setFiles(res.data.files || []);
+      } catch (err) {
+        console.error('Error fetching files:', err);
+      }
+    };
+    fetchFiles();
+  }, [API_URL]);
+
+  useEffect(() => {
     const fetchUrls = async () => {
       const token = localStorage.getItem('token');
       const urls = {};
+
       for (const file of files) {
         try {
-          const res = await axios.get(`http://localhost:3333/download/${file.path}`, {
-            headers: { Authorization: `Bearer ${token}` }
+          const res = await axios.get(`${API_URL}/download/${file.path}`, {
+            headers: { Authorization: `Bearer ${token}` },
           });
           urls[file.path] = res.data.url;
         } catch (err) {
+          console.error(`Error getting URL for ${file.path}:`, err);
           urls[file.path] = null;
         }
       }
       setFileUrls(urls);
     };
-    if (files.length > 0) fetchUrls();
-  }, [files]);
 
-  // --- Delete Handler ---
+    if (files.length > 0) fetchUrls();
+  }, [files, API_URL]);
+
   const handleDelete = async (filePath) => {
     if (!window.confirm('Are you sure you want to delete this file?')) return;
     setDeleting(filePath);
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:3333/delete/${filePath}`, {
-        headers: { Authorization: `Bearer ${token}` }
+      await axios.delete(`${API_URL}/delete/${filePath}`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-      setFiles(files.filter(f => f.path !== filePath));
+      setFiles(files.filter((f) => f.path !== filePath));
     } catch (err) {
       alert('Failed to delete file.');
     }
@@ -76,7 +82,9 @@ const Home = () => {
                   ) : (
                     <span className="text-6xl mb-2">📄</span>
                   )}
-                  <span className="text-lg font-semibold break-all text-center">{file.originalname}</span>
+                  <span className="text-lg font-semibold break-all text-center">
+                    {file.originalname}
+                  </span>
                 </div>
                 <div className="flex gap-4 mt-2">
                   {url && (

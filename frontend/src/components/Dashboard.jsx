@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3333';
 
 const Dashboard = () => {
   const [fileCount, setFileCount] = useState(0);
@@ -10,7 +11,7 @@ const Dashboard = () => {
     const fetchFiles = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:3333/home', {
+        const res = await axios.get(`${API_BASE}/home`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setFileCount(res.data.files.length);

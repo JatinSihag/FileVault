@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3333';
 
 const Upload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -22,7 +23,7 @@ const Upload = () => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:3333/upload', formData, {
+      await axios.post(`${API_URL}/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
