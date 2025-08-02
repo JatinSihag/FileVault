@@ -3,6 +3,7 @@ node_modules
 uploads/
 # Add any other sensitive or build files here
 backend/drive-31121-firebase-adminsdk-fbsvc-50fc691f6e.json
+C:\Users\acer\Desktop\FileVault\backend\drive-31121-firebase-adminsdk-fbsvc-79d80671b3.json
 backend/drive-31121-firebase-adminsdk-fbsvc-79d80671b3.json
 # Do NOT ignore package.json
 !package.json

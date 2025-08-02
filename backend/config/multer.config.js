@@ -1,29 +1,31 @@
 const multer = require('multer');
-const firebaseStrorage = require('multer-firebase-storage');
-const serviceAccount = require('../drive-31121-firebase-adminsdk-fbsvc-79d80671b3.json');
+const firebaseStorage = require('multer-firebase-storage');
 
-const storage = firebaseStrorage({
-    credentials: {
-        clientEmail: serviceAccount.client_email,
-        privateKey: serviceAccount.private_key,
-        projectId: serviceAccount.project_id,
-    },
-    bucketName: 'drive-31121.firebasestorage.app',
-    unique: true,
+let serviceAccount;
+
+if (process.env.FIREBASE_KEY_BASE64) {
+  // ✅ Decode base64 string
+  serviceAccount = JSON.parse(
+    Buffer.from(process.env.FIREBASE_KEY_BASE64, 'base64').toString('utf8')
+  );
+} else {
+  // 🧪 Use local file during development
+  serviceAccount = require('../drive-31121-firebase-adminsdk-fbsvc-79d80671b3.json');
+}
+
+// ✅ Use correct Firebase Storage bucket name
+const bucketName = process.env.FIREBASE_STORAGE_BUCKET || 'drive-31121.appspot.com';
+
+const storage = firebaseStorage({
+  credentials: {
+    clientEmail: serviceAccount.client_email,
+    privateKey: serviceAccount.private_key.replace(/\\n/g, '\n'), // important
+    projectId: serviceAccount.project_id,
+  },
+  bucketName: bucketName,
+  unique: true,
 });
 
-const upload = multer({
-    storage: storage,
-});
-
-// Debug: log when upload middleware is used
-upload._handleFile = function(req, file, cb) {
-    try {
-        multer.Storage.prototype._handleFile.call(this, req, file, cb);
-    } catch (err) {
-        console.error('Multer Firebase Storage error:', err);
-        cb(err);
-    }
-};
+const upload = multer({ storage });
 
 module.exports = upload;
