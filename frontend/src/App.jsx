@@ -39,7 +39,7 @@ function App() {
   }, [setUser]);
   const isAuth = !!user;
   if (loading) {
-    return <div>Loading...</div>; // or a spinner component
+    return <div>Loading...</div>; 
   }
 
   return (
@@ -48,7 +48,7 @@ function App() {
         <Route path="/login" element={isAuth ? <Navigate to="/home" /> : <Login />} />
         <Route path="/register" element={isAuth ? <Navigate to="/home" /> : <Register />} />
 
-        {/* Protected routes with Navbar */}
+        {}
   
         <Route
           path="/upload"
@@ -61,9 +61,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route
-          path="/home"
-          element={
+        <Route path="/home" element={
             <PrivateRoute>
               <>
                 <Navbar />
@@ -72,15 +70,13 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route
-  path="/profile"
-  element={
-    <PrivateRoute>
-      <>
+        <Route path="/profile" element={
+        <PrivateRoute>
+        <>
         <Navbar />
         <Profile />
-      </>
-    </PrivateRoute>
+        </>
+        </PrivateRoute>
   }
 />
       </Routes>

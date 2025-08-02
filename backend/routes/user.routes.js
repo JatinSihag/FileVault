@@ -4,11 +4,12 @@ const {body,validationResult} =require('express-validator')
 const userModel = require('../Models/user.models');
 const multer = require('multer');
 const path = require('path');
-const upload = multer({ dest: 'uploads/' }); // or configure as needed
+const upload = multer({ dest: 'uploads/' });
 
 
 const auth = require('../middlewares/auth');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const { log } = require('console');
 
 
 router.get('/profile',auth ,async(req,res)=>{
@@ -97,6 +98,7 @@ router.post('/login',
         })
     }
     const {username,password}=req.body;
+    console.log(req.body, "Login request body");
     const user = await userModel.findOne({
         username:username
     })   
@@ -111,6 +113,7 @@ router.post('/login',
             message:'password is incorrect',    
         })
     }
+    console.log(isMatch, "isMatch");
     const token = jwt.sign({
     userId: user._id,
     email: user.email,

@@ -1,6 +1,5 @@
 const Firebase = require('firebase-admin');
 
-// Use environment variables for service account if available, otherwise fallback to JSON file (for local dev)
 let serviceAccount;
 if (process.env.FIREBASE_TYPE) {
   serviceAccount = {
@@ -17,7 +16,7 @@ if (process.env.FIREBASE_TYPE) {
     universe_domain: process.env.FIREBASE_UNIVERSE_DOMAIN,
   };
 } else {
-  serviceAccount = require('../drive-31121-firebase-adminsdk-fbsvc-50fc691f6e.json');
+  serviceAccount = require('../drive-31121-firebase-adminsdk-fbsvc-79d80671b3.json');
 }
 
 const firebase = Firebase.initializeApp({
